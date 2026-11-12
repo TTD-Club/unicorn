@@ -651,6 +651,11 @@ typedef enum uc_control_type {
     // read the invalid_addr after an error
     // Read: @args = (uint64_t*)
     UC_CTL_INVALID_ADDR,
+    // Mark a UC_HOOK_MEM_READ, UC_HOOK_MEM_READ_AFTER or UC_HOOK_MEM_WRITE
+    // hook as reading no CPU state, so the precise PC is not restored before it
+    // runs. Registers read in such a hook may be stale.
+    // Write: @args = (uc_hook hook, int no_sync)
+    UC_CTL_HOOK_NO_SYNC,
 } uc_control_type;
 
 /*
@@ -742,6 +747,8 @@ See sample_ctl.c for a detailed example.
     uc_ctl(uc, UC_CTL_READ_WRITE(UC_CTL_PAUTH_AUTH, 4), (uint64_t)(ptr), (int)(key), (uint64_t)(diversifier), (uint64_t *)(valid))
 #define uc_ctl_get_invalid_addr(uc, addr)                                    \
     uc_ctl(uc, UC_CTL_READ(UC_CTL_INVALID_ADDR, 1), (addr))
+#define uc_ctl_hook_no_sync(uc, hook, no_sync)                                 \
+    uc_ctl(uc, UC_CTL_WRITE(UC_CTL_HOOK_NO_SYNC, 2), (hook), (no_sync))
 
 // Opaque storage for CPU context, used with uc_context_*()
 struct uc_context;
