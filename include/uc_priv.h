@@ -170,6 +170,8 @@ struct hook {
     int op_flags;   // opcode flags for HOOK_TCG_OPCODE
     bool to_delete; // set to true when the hook is deleted by the user. The
                     // destruction of the hook is delayed.
+    bool no_sync;   // a memory hook that reads no CPU state: the PC is not
+                    // synced before it runs (UC_CTL_HOOK_NO_SYNC)
     uint64_t begin, end; // only trigger if PC or memory access is in this
                          // address (depends on hook type)
     void *callback;      // a uc_cb_* type

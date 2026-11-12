@@ -3078,6 +3078,22 @@ uc_err uc_ctl(uc_engine *uc, uc_control_type control, ...)
         }
         break;
 
+    case UC_CTL_HOOK_NO_SYNC:
+        if (rw == UC_CTL_IO_WRITE) {
+            struct hook *hook = (struct hook *)va_arg(args, uc_hook);
+            int no_sync = va_arg(args, int);
+            if (hook == NULL ||
+                !(hook->type & (UC_HOOK_MEM_READ | UC_HOOK_MEM_READ_AFTER |
+                                UC_HOOK_MEM_WRITE))) {
+                err = UC_ERR_ARG;
+            } else {
+                hook->no_sync = no_sync != 0;
+            }
+        } else {
+            err = UC_ERR_ARG;
+        }
+        break;
+
     default:
         err = UC_ERR_ARG;
         break;
