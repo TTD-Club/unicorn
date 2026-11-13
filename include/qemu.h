@@ -44,6 +44,9 @@ typedef struct RAMList {
     bool freed;
     RAMBlock *mru_block;
     RAMBlock *last_block;
+    // The end of the highest ram_addr range handed out. last_block is the tail of the list, which is sorted by size,
+    // not the block that ends highest.
+    ram_addr_t end;
     QLIST_HEAD(, RAMBlock) blocks;
 } RAMList;
 
